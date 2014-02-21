@@ -15,7 +15,7 @@
 			<div id = "search-shown">
 				<form action="<?php echo base_url('index.php/search/search_rm'); ?>" method="get" accept-charset="utf-8">
 				
-					<input type="text" name="keyword" size = "50"/>
+					<input type="text" name="keyword" size = "50" value="<?php if(isset($_GET['keyword'])) echo $_GET['keyword']; ?>"/>
 					<input type="submit" name="search1" value="Search"/>
 				</form>
 				<a href="#" class = "search-toggle">Advanced Search</a>
