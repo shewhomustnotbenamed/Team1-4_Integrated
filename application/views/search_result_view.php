@@ -2,18 +2,19 @@
 <?php 
 	//prompts the User that he/she can still reserve a book (if the Waitlist button was clicked)
 	if($this->session->userdata('canReserve') == true && $flag == 0){
-		echo "This book is still available. Do you want to reserve it?";
-		echo '<form method="post" accept-charset="utf-8" action="http://localhost/icsls/index.php/search/transaction">';
-		echo '<input type="submit" name="reserve" id="reserve" value="Reserve"/>';
+		echo "This book is still available. Do you want to reserve it?";?>
+		<?php echo '<form method="get" accept-charset="utf-8" action="'?><?php echo base_url('index.php/search/transaction'); ?><?php echo '">';?>
+		
+		<?php echo '<input type="submit" name="reserve" id="reserve" value="Reserve"/>';
 		echo '<input type="submit" name="cancel" value="Cancel"/>';
 		echo '<input type="hidden" name = "id" value="' . $this->session->userdata('referenceId') . '"/>';
 		echo '</form>';
 	}
 	//prompts the User that he/she can still waitlist a book (if the Reserve button was clicked)
 	if($this->session->userdata('canWaitlist') == true && $flag == 0){
-		echo "This book is not available for now. Do you want to wait list?";
-		echo '<form method="post" accept-charset="utf-8" action="http://localhost/icsls/index.php/search/transaction">';
-		echo '<input type="submit" name="waitlist" id="waitlist" value="Waitlist"/>';
+		echo "This book is not available for now. Do you want to wait list?";?>
+		<?php echo '<form method="get" accept-charset="utf-8" action="'?><?php echo base_url('index.php/search/transaction'); ?><?php echo '">';?>
+		<?php echo '<input type="submit" name="waitlist" id="waitlist" value="Waitlist"/>';
 		echo '<input type="submit" name="cancel" value="Cancel"/>';
 		echo '<input type="hidden" name = "id" value="' . $this->session->userdata('referenceId') . '"/>';
 		echo '</form>';
@@ -78,7 +79,7 @@
 		<div>			
 			<?php 
 				echo $this->pagination->create_links();
-				if(!$flags ){
+				if(!empty($rows)){
 				foreach($rows as $row): ?>
 				<form action="<?php echo base_url('index.php/search/transaction'); ?>" method="get" accept-charset="utf-8">
 					<p><?=$row->title?></p>
