@@ -47,7 +47,8 @@
 					
 					</form>
 				-->
-				<?php echo anchor('search/transaction/'.$items['id'],'Reserve'); ?>
+				
+				<button type="submit" formmethod="get" formaction="<?php echo base_url('index.php/search/transaction/'.$items['id']); ?>" name="reserve">Reserve</button>
 				</td>
 			</p>
 			<?php endif; ?>

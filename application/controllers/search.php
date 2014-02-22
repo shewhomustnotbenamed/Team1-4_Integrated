@@ -103,7 +103,7 @@ class Search extends CI_Controller{
 		$referenceId = $this->input->get('id');
 		$userId = $this->session->userdata('id');
 		//var_dump($referenceId);
-		if($referenceId==FALSE){
+		if($referenceId==NULL){
 			$referenceId = $this->uri->segment(3);
 		}
 		$user_type = $this->session->userdata('user_type');
@@ -112,7 +112,7 @@ class Search extends CI_Controller{
 		//if "Reserve" button was clicked
 		if(isset($_GET['reserve'])){
 			$reserveStatus = $this->user_model->reserve_reference_material($referenceId, $userId, $user_type);
-			var_dump($reserveStatus);
+			//var_dump($reserveStatus);
 			if($reserveStatus == FALSE){	//if conditions in reserving were not satisfied
 				echo "Reserve Action Denied: <br/>";
 				echo "&nbsp;&nbsp;&nbsp;&nbsp;3 possible reasons <br/>";
@@ -153,7 +153,7 @@ class Search extends CI_Controller{
 				$this->load->view('search_result_view.php', $data);
 			}
 		 //if "Waitlist" button was clicked
-		}else if(isset($_POST['waitlist'])){
+		}else if(isset($_GET['waitlist'])){
 			$waitlistStatus = $this->user_model->waitlist_reference_material($referenceId, $userId, $user_type);
 	
 			if($waitlistStatus == FALSE){	//if conditions in waitlisting were not satisfied
