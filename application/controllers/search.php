@@ -109,9 +109,12 @@ class Search extends CI_Controller{
 		$user_type = $this->session->userdata('user_type');
 		$input = $this->session->userdata('keyword');
 		$email = $this->session->userdata('email_address');	
+		$firstName = $this->session->userdata('firstName');	
+		//echo $email;
 		//if "Reserve" button was clicked
 		if(isset($_GET['reserve'])){
 			$reserveStatus = $this->user_model->reserve_reference_material($referenceId, $userId, $user_type);
+			//var_dump($reserveStatus);
 			//var_dump($reserveStatus);
 			if($reserveStatus == FALSE){	//if conditions in reserving were not satisfied
 				echo "Reserve Action Denied: <br/>";
@@ -139,6 +142,8 @@ class Search extends CI_Controller{
 					$data['flags']=FALSE;
 				else $data['flags']=TRUE;
 				
+				$this->send_email($email,$firstName);
+
 				$this->load->view('search_result_view.php', $data);
 				
 			}
@@ -426,5 +431,61 @@ SELECT * FROM `reference_material` WHERE title like '%a%' or author like
 		$result = $this->user_model->view_reference_material($bookid);
 		$data['rows'] = $result->result();
 		$this->load->view('view_results_view', $data);
+	}
+
+	/**
+	 * function to email after successful reserve
+	 *
+	 * @access	public
+	 */
+	function send_email($email_add,$name){
+
+		$config = Array(
+			'protocol' => "smtp",
+			'smtp_host' => "ssl://smtp.googlemail.com",
+			'smtp_port' => 465,
+			'smtp_user' => "user.librarian@gmail.com",
+			'smtp_pass' => "userlibrarian",//password
+			'mailtype'  => 'html',
+			'charset' => 'utf-8'
+		);
+
+		$date = date('Y-m-d H:m:s');
+		$newdate = strtotime ( '+3 Days' , strtotime( $date ));
+		$newdate = date('y-m-d',$newdate);
+		$day= date("l", strtotime($date) );
+		
+		if($day == "Saturday")
+			{
+				$duedate = strtotime ( '+2 day' , strtotime( $newdate ));
+				$duedate = date('F j, Y',$duedate);
+			}
+		elseif($day == "Sunday")
+			{
+				$duedate = strtotime ( '+1 day' , strtotime( $newdate ));
+				$duedate = date('F j, Y',$duedate);
+			}
+		else
+		{
+			$duedate = date('F j, Y',strtotime($newdate));
+		}
+		$date = date('F j, Y',strtotime($date));
+
+		$this->load->library("email", $config);//we pass our configuration
+		$this->email->set_newline("\r\n");
+
+		$this->email->from("user.librarian@gmail.com", "ICS Librarian");
+		//sample only
+		$this->email->to($email_add);
+		$this->email->subject("Reference Material Reservation");
+		$this->email->message("Dear {$name}, <br/>last ".$date." you have reserved a book using ICS OnLib."."<br/>This will be due on : <h1>".$duedate."</h1>You must claim the book on or before the due date. 
+			Thank you for your cooperation.<br/>Sincerely,<br/><h3>ICS Librarian</h3>");
+
+		if($this->email->send()){//if sent successfully
+			echo " Reservation details was sent to your email.";
+		}
+		else{
+			redirect('home');
+		}
 	}
 }?>

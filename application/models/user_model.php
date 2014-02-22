@@ -35,7 +35,7 @@ class User_model extends CI_Model{
 	 * @return	array
 	 */
 	public function get_user_data($username, $password){
-		$this->db->select(array('id', 'user_type', 'username')
+		$this->db->select(array('id', 'user_type', 'username','email_address','first_name')
 						 )
 				 ->from('users')
 				 ->where('username', $username)
