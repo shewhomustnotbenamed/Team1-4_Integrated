@@ -153,7 +153,7 @@ class Search extends CI_Controller{
 				$this->load->view('search_result_view.php', $data);
 			}
 		 //if "Waitlist" button was clicked
-		}else if(isset($_POST['waitlist'])){
+		}else if(isset($_GET['waitlist'])){
 			$waitlistStatus = $this->user_model->waitlist_reference_material($referenceId, $userId, $user_type);
 	
 			if($waitlistStatus == FALSE){	//if conditions in waitlisting were not satisfied
