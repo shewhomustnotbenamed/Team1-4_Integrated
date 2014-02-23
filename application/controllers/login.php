@@ -6,8 +6,8 @@ class Login extends CI_Controller{
 	}
 
 	public function index(){
-		$username = $this->input->post('username');
-		$password = md5($this->input->post('password'));
+		$username = mysql_real_escape_string($this->input->post('username'));
+		$password = mysql_real_escape_string(md5($this->input->post('password')));
 
 		//Checks if the user is registered
 		if($this->user_model->user_exists($username, $password)){
